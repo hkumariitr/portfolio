@@ -4,25 +4,25 @@ import React, { useState, useEffect } from "react";
 import { useMotionTemplate, motion } from "motion/react";
 import { cn } from "@/lib/utils";
 import {pfpurl} from "../../data/index"
+
 export const Profile = ({
-  text,
   className,
 }: {
   text?: string;
   className?: string;
 }) => {
-  let mouseX = useMotionValue(0);
-  let mouseY = useMotionValue(0);
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
 
   const [randomString, setRandomString] = useState("");
 
   useEffect(() => {
-    let str = generateRandomString(1500);
+    const str = generateRandomString(1500);
     setRandomString(str);
   }, []);
 
-  function onMouseMove({ currentTarget, clientX, clientY }: any) {
-    let { left, top } = currentTarget.getBoundingClientRect();
+  function onMouseMove({ currentTarget, clientX, clientY }: React.MouseEvent<HTMLDivElement>) {
+    const { left, top } = currentTarget.getBoundingClientRect();
     mouseX.set(clientX - left);
     mouseY.set(clientY - top);
 
@@ -50,7 +50,7 @@ export const Profile = ({
           <div className="relative h-[11rem] w-[11rem]  rounded-full flex items-center justify-center font-bold text-4xl">
             <div className="absolute w-full h-full dark:bg-black/[0.2] blur rounded-full" />
             
-            <img src = {pfpurl} className="rounded-full" />
+            <img src={pfpurl} className="rounded-full" alt="Profile" />
           </div>
         </div>
       </div>
@@ -58,9 +58,17 @@ export const Profile = ({
   );
 };
 
-export function CardPattern({ mouseX, mouseY, randomString }: any) {
-  let maskImage = useMotionTemplate`radial-gradient(250px at ${mouseX}px ${mouseY}px, white, transparent)`;
-  let style = { maskImage, WebkitMaskImage: maskImage };
+export function CardPattern({ 
+  mouseX, 
+  mouseY, 
+  randomString 
+}: { 
+  mouseX: ReturnType<typeof useMotionValue<number>>;
+  mouseY: ReturnType<typeof useMotionValue<number>>;
+  randomString: string;
+}) {
+  const maskImage = useMotionTemplate`radial-gradient(250px at ${mouseX}px ${mouseY}px, white, transparent)`;
+  const style = { maskImage, WebkitMaskImage: maskImage };
 
   return (
     <div className="pointer-events-none">
@@ -91,7 +99,13 @@ export const generateRandomString = (length: number) => {
   return result;
 };
 
-export const Icon = ({ className, ...rest }: any) => {
+export const Icon = ({ 
+  className, 
+  ...rest 
+}: { 
+  className?: string; 
+  [key: string]: unknown; 
+}) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
